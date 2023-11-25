@@ -1,8 +1,10 @@
 package com.laca.service;
 
+
+
+import com.laca.BL.FactoryUsers.FactoryUsers;
 import com.laca.entity.Interfaces.IConstructUser;
 import com.laca.entity.PackageUnitAbstract.Users;
-import com.laca.entity.Transporter;
 import jakarta.transaction.Transactional;
 
 
@@ -26,13 +28,14 @@ public class UserService {
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Users user = new Users();
-                user.setId(resultSet.getLong("id"));
-                user.setName(resultSet.getString("name"));
-                user.setIdentification(resultSet.getString("identificacion "));
-                user.setFactoryName(resultSet.getString("factoryName"));
-                user.setType(resultSet.getString("type"));
-                users.add(user);
+                users.add(FactoryUsers.createUser(
+                        resultSet.getString("name"),
+                        resultSet.getString("identificacion "),
+                        resultSet.getString("factoryName"),
+                        resultSet.getString("type")
+                ));
+
+
             }
         } catch (SQLException e) {
             // Manejo de excepciones
@@ -135,7 +138,7 @@ public class UserService {
 
 
     @Transactional
-    public Boolean deleteTransporter(Long transporterId) {
+    public Boolean deleteUser(Long transporterId) {
         try (Connection connection = dataSource.getConnection()) {
             String query = "DELETE FROM users where users.id  = ?";
             PreparedStatement statement = connection.prepareStatement(query);

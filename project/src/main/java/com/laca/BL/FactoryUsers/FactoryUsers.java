@@ -5,7 +5,7 @@ package com.laca.BL.FactoryUsers;
 import com.laca.entity.Interfaces.IConstructUser;
 import com.laca.entity.concretUsers.*;
 
-public class FactoryUserss {
+public class FactoryUsers {
 
     public static IConstructUser createUser(String name, String identification, String factoryName, String type) {
         if ("AdminUser".equalsIgnoreCase(type)) {

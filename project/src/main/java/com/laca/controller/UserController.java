@@ -1,7 +1,9 @@
 package com.laca.controller;
 
-import com.laca.entity.Transporter;
-import com.laca.service.TransporterService;
+
+import com.laca.entity.Interfaces.IConstructUser;
+import com.laca.entity.PackageUnitAbstract.Users;
+import com.laca.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,30 +15,30 @@ import java.util.List;
 @RequestMapping("/transporters")
 @CrossOrigin(origins = "http://localhost:4200/")
 public class UserController {
-    private final TransporterService transporterService;
+    private final UserService userService;
 
     @Autowired
-    public UserController(TransporterService transporterService) {
-        this.transporterService = transporterService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
-    public List<Transporter> getAllTransporters() {
-        List<Transporter> transporters = transporterService.getAllTransporters();
-        return transporters;
+    public List<IConstructUser> getAllUsers() {
+        List<IConstructUser> users = userService.getAllUsers();
+        return users;
     }
 
     @PostMapping
-    public Transporter saveTransporter(@RequestBody Transporter transporter) {
-        return transporterService.saveTransporter(transporter);
+    public Users saveUser(@RequestBody Users users) {
+        return userService.saveUser(users);
     }
 
     @PutMapping("/{transporterId}")
     public ResponseEntity<?> updateTransporter(
-            @PathVariable Long transporterId,
-            @RequestBody Transporter updatedTransporter) {
+            @PathVariable Long userId,
+            @RequestBody Users updatedUser) {
         try {
-            Transporter updated = transporterService.updateTransporter(transporterId, updatedTransporter);
+            Users updated = userService.updateUser(userId, updatedUser);
             return ResponseEntity.ok(updated);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating transporter: " + e.getMessage());
@@ -44,9 +46,9 @@ public class UserController {
     }
 
     @GetMapping("/{transporterId}")
-    public ResponseEntity<?> getTransporterById(@PathVariable Long transporterId) {
+    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
         try {
-            Transporter transporter = transporterService.getTransporterById(transporterId);
+            Users transporter = userService.getUserById(userId);
             return ResponseEntity.ok(transporter);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transporter not found: " + e.getMessage());
@@ -54,15 +56,15 @@ public class UserController {
     }
 
     @DeleteMapping("/{transporterId}")
-    public ResponseEntity<?> deleteTransporter(@PathVariable Long transporterId) {
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         try {
-            boolean isDeleted = transporterService.deleteTransporter(transporterId);
-            Transporter transporter= new Transporter();
-            transporter.setId(transporterId);
+            boolean isDeleted = userService.deleteUser(userId);
+            Users transporter= new Users();
+            transporter.setId(userId);
             if (isDeleted) {
                 return ResponseEntity.ok(transporter);
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(transporterId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userId);
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting transporter: " + e.getMessage());
