@@ -1,0 +1,78 @@
+{
+  "info": {
+    "_postman_id": "e9a54eea-81dc-44c6-833e-fe693a1bfe58",
+    "name": "LACA",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "_exporter_id": "2572349"
+  },
+  "item": [
+    {
+      "name": "Transporters",
+      "item": [
+        {
+          "name": "Retrieve All",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/transporters"
+          },
+          "response": []
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Usuario Chris\",\n    \"company\": \"Aquella empresa\" \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "http://localhost:8080/transporters"
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Usuario Carlos\",\n    \"company\": \"Su empresita nueva\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "http://localhost:8080/transporters/4"
+          },
+          "response": []
+        },
+        {
+          "name": "RetrieveById",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/transporters/2"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "http://localhost:8080/transporters/5"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
