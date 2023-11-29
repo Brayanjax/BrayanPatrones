@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/transporters")
+@RequestMapping("/unit_transporter")
 @CrossOrigin(origins = "http://localhost:4200/")
 public class UnitTransportController {
     private final UnitTransportService unitTransportService;
@@ -34,7 +34,7 @@ public class UnitTransportController {
         return unitTransportService.saveUnitTransporter(unitTransporterAbstract);
     }
 
-    @PutMapping("/{Unit_Transporter_Id}")
+    @PutMapping("/{unit_transporter_Id}")
     public ResponseEntity<?> updateUnitTransporter(
             @PathVariable Long transporterId,
             @RequestBody UnitTransporterAbstract updatedTransporter) {
@@ -42,17 +42,17 @@ public class UnitTransportController {
             UnitTransporterAbstract updated = unitTransportService.updateUnitTransporter(transporterId, updatedTransporter);
             return ResponseEntity.ok(updated);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating transporter: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating unit transporter: " + e.getMessage());
         }
     }
 
-    @GetMapping("/{Unit_transporter_Id}")
+    @GetMapping("/{unit_transporter_Id}")
     public ResponseEntity<?> getUnitTransporterById(@PathVariable Long UnitTransporterId) {
         try {
             UnitTransporterAbstract unitTransporterAbstract = unitTransportService.getUnitTransporterById(UnitTransporterId);
             return ResponseEntity.ok(unitTransporterAbstract);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transporter not found: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("unit transporter not found: " + e.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class UnitTransportController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(UnitTransporterId);
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting transporter: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting unit transporter: " + e.getMessage());
         }
 
     }

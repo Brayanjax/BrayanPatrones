@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/transporters")
+@RequestMapping("/user")
 @CrossOrigin(origins = "http://localhost:4200/")
 public class UserController {
     private final UserService userService;
@@ -33,7 +33,7 @@ public class UserController {
         return userService.saveUser(users);
     }
 
-    @PutMapping("/{transporterId}")
+    @PutMapping("/{userId}")
     public ResponseEntity<?> updateTransporter(
             @PathVariable Long userId,
             @RequestBody Users updatedUser) {
@@ -41,21 +41,21 @@ public class UserController {
             Users updated = userService.updateUser(userId, updatedUser);
             return ResponseEntity.ok(updated);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating transporter: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating User: " + e.getMessage());
         }
     }
 
-    @GetMapping("/{transporterId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable Long userId) {
         try {
             Users transporter = userService.getUserById(userId);
             return ResponseEntity.ok(transporter);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transporter not found: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found: " + e.getMessage());
         }
     }
 
-    @DeleteMapping("/{transporterId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         try {
             boolean isDeleted = userService.deleteUser(userId);
@@ -67,7 +67,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userId);
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting transporter: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting User: " + e.getMessage());
         }
 
     }
