@@ -24,18 +24,16 @@ public class UserService {
     public List<IConstructUser> getAllUsers() {
         List<IConstructUser> users = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM users";
+            String query = "SELECT * FROM user";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 users.add(FactoryUsers.createUser(
                         resultSet.getString("name"),
-                        resultSet.getString("identificacion "),
+                        resultSet.getString("identification "),
                         resultSet.getString("factoryName"),
                         resultSet.getString("type")
                 ));
-
-
             }
         } catch (SQLException e) {
             // Manejo de excepciones
@@ -46,7 +44,7 @@ public class UserService {
     @Transactional
     public Users saveUser(Users users) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "INSERT INTO transporters (name,identificacion,factoryName,type) VALUES (?, ?)";
+            String query = "INSERT INTO user (name,identificacion,factoryName,type) VALUES (?, ?)";
             PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, users.getName());
             statement.setString(2, users.getIdentification());
@@ -62,7 +60,7 @@ public class UserService {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error saving new transporter");
+            throw new RuntimeException("Error saving new user");
         }
         return users;
     }
@@ -82,7 +80,7 @@ public class UserService {
             boolean hasResults = statement.execute();
 
             if (!hasResults) {
-                throw new RuntimeException("Error updating transporter: No results from the stored procedure.");
+                throw new RuntimeException("Error updating user: No results from the stored procedure.");
             }
 
             ResultSet resultSet = statement.getResultSet();
@@ -103,17 +101,17 @@ public class UserService {
 
                 return updatedUser;
             } else {
-                throw new RuntimeException("Transporter not found by ID");
+                throw new RuntimeException("User not found by ID");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error updating transporter: " + e.getMessage(), e);
+            throw new RuntimeException("Error updating User: " + e.getMessage(), e);
         }
     }
 
     @Transactional
     public Users getUserById(Long transporterId) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT id,name,identificacion,factoryName,type FROM users WHERE id = ?";
+            String query = "SELECT id,name,identificacion,factoryName,type FROM user WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, transporterId);
 
@@ -123,16 +121,16 @@ public class UserService {
                 Users user = new Users();
                 user.setId(resultSet.getLong("id"));
                 user.setName(resultSet.getString("name"));
-                user.setIdentification(resultSet.getString("identificacion "));
+                user.setIdentification(resultSet.getString("identification "));
                 user.setFactoryName(resultSet.getString("factoryName"));
                 user.setType(resultSet.getString("type"));
 
                 return user;
             } else {
-                throw new RuntimeException("Transporter not found with ID: " + transporterId);
+                throw new RuntimeException("User not found with ID: " + transporterId);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error retrieving transporter: " + e.getMessage(), e);
+            throw new RuntimeException("Error retrieving User: " + e.getMessage(), e);
         }
     }
 
@@ -140,7 +138,7 @@ public class UserService {
     @Transactional
     public Boolean deleteUser(Long transporterId) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "DELETE FROM users where users.id  = ?";
+            String query = "DELETE FROM user where user.id  = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, transporterId);
             int rowsAffected = statement.executeUpdate();
@@ -152,7 +150,7 @@ public class UserService {
             return true;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error deleting transporter: " + e.getMessage(), e);
+            throw new RuntimeException("Error deleting User: " + e.getMessage(), e);
         }
     }
 }

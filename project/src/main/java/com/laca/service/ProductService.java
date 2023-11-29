@@ -1,6 +1,4 @@
 package com.laca.service;
-
-
 import com.laca.entity.concretProduct.Product;
 import jakarta.transaction.Transactional;
 
@@ -21,12 +19,11 @@ public class ProductService {
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM products";
+            String query = "SELECT * FROM product";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Product product = new Product();
-
                 product.setType(resultSet.getString("type"));
                 product.setWeight(resultSet.getDouble("weight"));
                 product.setName(resultSet.getString("name"));
@@ -45,10 +42,19 @@ public class ProductService {
     @Transactional
     public Product saveProduct(Product product) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "INSERT INTO transporters (name, company) VALUES (?, ?)";
+            String query = "INSERT INTO product (type,weight,name, description,price,height,width) VALUES (?,?,?,?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-            statement.setString(1, product.getName());
-            statement.setString(2, product.getDescription());
+
+            statement.setString(1, product.getType());
+            statement.setDouble(2, product.getWeight());
+            statement.setString(3, product.getName());
+            statement.setString(4, product.getDescription());
+            statement.setDouble(5, product.getPrice());
+            statement.setDouble(6, product.getHeight());
+            statement.setDouble(7, product.getWidth());
+
+
+
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 1) {
                 ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -57,65 +63,84 @@ public class ProductService {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error saving new transporter");
+            throw new RuntimeException("Error saving new Product");
         }
         return product;
     }
 
     @Transactional
-    public Transporter updateTransporter(Long transporterId, Transporter updatedTransporter) {
+    public Product updatedProduct(Long ProductId, Product updatedProduct) {
         try (Connection connection = dataSource.getConnection()) {
-            String storedProcedureCall = "{call update_transporter(?, ?, ?)}";
+            String storedProcedureCall = "{call update_Product(?, ?, ?,?, ?, ?,?)}";
             CallableStatement statement = connection.prepareCall(storedProcedureCall);
 
-            statement.setLong(1, transporterId);
-            statement.setString(2, updatedTransporter.getName());
-            statement.setString(3, updatedTransporter.getCompany());
+            statement.setString(1, updatedProduct.getType());
+            statement.setDouble(2, updatedProduct.getWeight());
+            statement.setString(3, updatedProduct.getName());
+            statement.setString(4, updatedProduct.getDescription());
+            statement.setDouble(5, updatedProduct.getPrice());
+            statement.setDouble(6, updatedProduct.getHeight());
+            statement.setDouble(7, updatedProduct.getWidth());
 
             boolean hasResults = statement.execute();
 
             if (!hasResults) {
-                throw new RuntimeException("Error updating transporter: No results from the stored procedure.");
+                throw new RuntimeException("Error updating Product: No results from the stored procedure.");
             }
 
             ResultSet resultSet = statement.getResultSet();
 
             if (resultSet.next()) {
                 int updatedId = resultSet.getInt("id");
-                String updatedName = resultSet.getString("name");
-                String updatedCompany = resultSet.getString("company");
+                String updatedType = resultSet.getString("Type");
+                double updatedWeight = resultSet.getDouble("Weight");
+                String updatedName = resultSet.getString("Name");
+                String updatedDescription = resultSet.getString("Description");
+                double updatedPrice = resultSet.getDouble("Price");
+                double updatedHeight = resultSet.getDouble("Height");
+                double updatedWidth = resultSet.getDouble("Width");
 
                 // Crea un nuevo Transporter con los datos actualizados y devuélvelo
-                updatedTransporter.setId((long) updatedId);
-                updatedTransporter.setName(updatedName);
-                updatedTransporter.setCompany(updatedCompany);
+                updatedProduct.setId((long) updatedId);
+                updatedProduct.setType(updatedType);
+                updatedProduct.setWeight(updatedWeight);
+                updatedProduct.setName(updatedName);
+                updatedProduct.setDescription(updatedDescription);
+                updatedProduct.setPrice(updatedPrice);
+                updatedProduct.setHeight(updatedHeight);
+                updatedProduct.setWidth(updatedWidth);
 
-                return updatedTransporter;
+                return updatedProduct;
             } else {
-                throw new RuntimeException("Transporter not found by ID");
+                throw new RuntimeException("Product not found by ID");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error updating transporter: " + e.getMessage(), e);
+            throw new RuntimeException("Error updating Product: " + e.getMessage(), e);
         }
     }
 
     @Transactional
-    public Transporter getTransporterById(Long transporterId) {
+    public Product getProductById(Long productId) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT id, name, company FROM transporters WHERE id = ?";
+            String query = "SELECT id,type,weight,name, description,price,height,width FROM products WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setLong(1, transporterId);
+            statement.setLong(1, productId);
 
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                Transporter transporter = new Transporter();
-                transporter.setId(resultSet.getLong("id"));
-                transporter.setName(resultSet.getString("name"));
-                transporter.setCompany(resultSet.getString("company"));
-                return transporter;
+                Product product = new Product();
+                product.setId(resultSet.getLong("id"));
+                product.setType(resultSet.getString("type"));
+                product.setWeight(resultSet.getDouble("weight"));
+                product.setName(resultSet.getString("name"));
+                product.setDescription(resultSet.getString("description"));
+                product.setPrice(resultSet.getDouble("Price"));
+                product.setHeight(resultSet.getDouble("Height"));
+                product.setWidth(resultSet.getDouble("Width"));
+                return product;
             } else {
-                throw new RuntimeException("Transporter not found with ID: " + transporterId);
+                throw new RuntimeException("Transporter not found with ID: " + productId);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving transporter: " + e.getMessage(), e);
@@ -124,11 +149,11 @@ public class ProductService {
 
 
     @Transactional
-    public Boolean deleteTransporter(Long transporterId) {
+    public Boolean deleteProduct(Long ProductId) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "DELETE FROM transporters where transporters.id  = ?";
+            String query = "DELETE FROM product where product.id  = ?";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setLong(1, transporterId);
+            statement.setLong(1, ProductId);
             int rowsAffected = statement.executeUpdate();
 
             if (rowsAffected == 0) {
@@ -138,7 +163,7 @@ public class ProductService {
             return true;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error deleting transporter: " + e.getMessage(), e);
+            throw new RuntimeException("Error deleting Product: " + e.getMessage(), e);
         }
     }
 }

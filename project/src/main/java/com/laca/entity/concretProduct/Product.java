@@ -37,6 +37,15 @@ public class Product implements Production {
         System.out.println("Height: " + height + " cm");
         System.out.println("Width: " + width + " cm");
     }
+    public void creates() {
+        this.type = type;
+        this.weight = weight;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.height = height;
+        this.width = width;
+    }
 
     public String getType() {
         return type;

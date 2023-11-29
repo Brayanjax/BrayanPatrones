@@ -20,18 +20,18 @@ public class UnitTransportService {
     public List<UnitTransporterAbstract> getAllUnitTransporters() {
         List<UnitTransporterAbstract> UnitTransport = new ArrayList<UnitTransporterAbstract>();
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM unitTransporters";
+            String query = "SELECT * FROM unit_transport";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 UnitTransport.add(FactoryUnitTransporter.createUnitTransport(
-                        resultSet.getString("name"),
-                        resultSet.getString("plate"),
+                        resultSet.getString("Name"),
+                        resultSet.getString("Plate"),
                         resultSet.getLong("high"),
                         resultSet.getLong("width"),
-                        resultSet.getString("type"),
-                        resultSet.getLong("maxWeight"),
-                        resultSet.getBoolean("isActive")
+                        resultSet.getString("Type"),
+                        resultSet.getLong("Max_Weight"),
+                        resultSet.getBoolean("Is_Active")
                 ));
             }
         } catch (SQLException e) {
@@ -39,11 +39,10 @@ public class UnitTransportService {
         }
         return UnitTransport;
     }
-
     @Transactional
     public UnitTransporterAbstract saveUnitTransporter(UnitTransporterAbstract unitTransporterAbstract) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "INSERT INTO Unit_Transporter (name, plate,high,width,type,maxWeight,isActive) VALUES (?,?,?,?,?,?,?)";
+            String query = "INSERT INTO unit_transport (name, plate,high,width,type,maxWeight,isActive) VALUES (?,?,?,?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, unitTransporterAbstract.getName());
             statement.setString(2, unitTransporterAbstract.getPlate());
@@ -52,7 +51,6 @@ public class UnitTransportService {
             statement.setString(5, unitTransporterAbstract.getType());
             statement.setDouble(6, unitTransporterAbstract.getMaxWeight());
             statement.setBoolean(7, unitTransporterAbstract.getIsActive());
-
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 1) {
                 ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -61,7 +59,7 @@ public class UnitTransportService {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error saving new transporter");
+            throw new RuntimeException("Error saving new Unit transporter");
         }
         return unitTransporterAbstract;// Duda de como crear esto
     }
@@ -69,9 +67,8 @@ public class UnitTransportService {
     @Transactional
     public UnitTransporterAbstract updateUnitTransporter(Long UnitTransportId, UnitTransporterAbstract upadatedUnitTransporterAbstract) {
         try (Connection connection = dataSource.getConnection()) {
-            String storedProcedureCall = "{call update_unit_Transport(?, ?, ?, ?, ?, ?, ?)}";
+            String storedProcedureCall = "{call update_unit_transport(?, ?, ?, ?, ?, ?, ?)}";
             CallableStatement statement = connection.prepareCall(storedProcedureCall);
-
             statement.setLong(1, UnitTransportId);
             statement.setString(1, upadatedUnitTransporterAbstract.getName());
             statement.setString(2, upadatedUnitTransporterAbstract.getPlate());
@@ -80,25 +77,20 @@ public class UnitTransportService {
             statement.setString(5, upadatedUnitTransporterAbstract.getType());
             statement.setDouble(6, upadatedUnitTransporterAbstract.getMaxWeight());
             statement.setBoolean(7, upadatedUnitTransporterAbstract.getIsActive());
-
             boolean hasResults = statement.execute();
-
             if (!hasResults) {
-                throw new RuntimeException("Error updating transporter: No results from the stored procedure.");
+                throw new RuntimeException("Error updating Unit transporter: No results from the stored procedure.");
             }
-
             ResultSet resultSet = statement.getResultSet();
-
             if (resultSet.next()) {
                 int updatedId = resultSet.getInt("id");
-                String updatedName = resultSet.getString("name");
-                String updatedPlate = resultSet.getString("plate");
+                String updatedName = resultSet.getString("Name");
+                String updatedPlate = resultSet.getString("Plate");
                 double updatedHigh = resultSet.getDouble("high");
                 double updatedWidth = resultSet.getDouble("width");
-                String updatedType = resultSet.getString("type");
-                double updatedMaxWeight = resultSet.getDouble(("maxWeight"));
-                boolean updatedIsActive = resultSet.getBoolean("isActive");
-
+                String updatedType = resultSet.getString("Type");
+                double updatedMaxWeight = resultSet.getDouble(("Max_Weight"));
+                boolean updatedIsActive = resultSet.getBoolean("Is_Active");
                 // Crea un nuevo Transporter con los datos actualizados y devuélvelo
                 upadatedUnitTransporterAbstract.setId((long) updatedId);
                 upadatedUnitTransporterAbstract.setName(updatedName);
@@ -108,26 +100,21 @@ public class UnitTransportService {
                 upadatedUnitTransporterAbstract.setType(updatedType);
                 upadatedUnitTransporterAbstract.setMaxWeight(updatedMaxWeight);
                 upadatedUnitTransporterAbstract.setIsActive(updatedIsActive);
-
-
                 return upadatedUnitTransporterAbstract;
             } else {
-                throw new RuntimeException("Transporter not found by ID");
+                throw new RuntimeException("Unit Transporter not found by ID");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error updating transporter: " + e.getMessage(), e);
+            throw new RuntimeException("Error updating Unit transporter: " + e.getMessage(), e);
         }
     }
-
     @Transactional
     public UnitTransporterAbstract getUnitTransporterById(Long UnitTransporterId) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT id,name,plate,high,width,type,maxWeight,isActive FROM UnitTransport WHERE id = ?";
+            String query = "SELECT id,name,plate,high,width,type,maxWeight,isActive FROM unit_transport WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, UnitTransporterId);
-
             ResultSet resultSet = statement.executeQuery();
-
             if (resultSet.next()) {
                 UnitTransporterAbstract unitTransporterAbstract = new UnitTransporterAbstract();
                 unitTransporterAbstract.setName(resultSet.getString("name"));
@@ -139,30 +126,25 @@ public class UnitTransportService {
                 unitTransporterAbstract.setIsActive(resultSet.getBoolean("isActive"));
                 return unitTransporterAbstract;
             } else {
-                throw new RuntimeException("Transporter not found with ID: " + UnitTransporterId);
+                throw new RuntimeException("Unit Transporter not found with ID: " + UnitTransporterId);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving transporter: " + e.getMessage(), e);
         }
     }
-
-
     @Transactional
     public Boolean deleteUnitTransporter(Long transporterId) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "DELETE FROM transporters where transporters.id  = ?";
+            String query = "DELETE FROM unit_transport where unit_transport.id  = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, transporterId);
             int rowsAffected = statement.executeUpdate();
-
             if (rowsAffected == 0) {
                 return false;
             }
-
             return true;
-
         } catch (SQLException e) {
-            throw new RuntimeException("Error deleting transporter: " + e.getMessage(), e);
+            throw new RuntimeException("Error deleting Unit Transporter: " + e.getMessage(), e);
         }
     }
 }
