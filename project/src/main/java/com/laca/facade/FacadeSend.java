@@ -1,15 +1,19 @@
-package com.laca.entity;
+package com.laca.facade;
 
-public class ReportSend {
+import com.laca.entity.PackageUnitAbstract.UnitTransporterAbstract;
+import com.laca.entity.RouteC.Route;
+import com.laca.entity.concretProduct.Product;
+
+public class FacadeSend {
 
     private String UserName;
-    private  String rutes;
-    private  String product;
-    private  String unitTransport;
+    private String routes;
+    private Product product;
+    private UnitTransporterAbstract unitTransport;
 
-    public ReportSend(String userName, String rutes, String product, String unitTransport) {
+    public FacadeSend(String userName, Route routes, Product product, UnitTransporterAbstract unitTransport) {
         UserName = userName;
-        this.rutes = rutes;
+        this.routes = routes;
         this.product = product;
         this.unitTransport = unitTransport;
     }
@@ -22,12 +26,12 @@ public class ReportSend {
         UserName = userName;
     }
 
-    public String getRutes() {
-        return rutes;
+    public Route getRoutes() {
+        return routes;
     }
 
-    public void setRutes(String rutes) {
-        this.rutes = rutes;
+    public void setRoutes(String routes) {
+        this.routes = routes;
     }
 
     public String getProduct() {
