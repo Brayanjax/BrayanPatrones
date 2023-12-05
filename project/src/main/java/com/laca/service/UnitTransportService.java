@@ -3,12 +3,13 @@ package com.laca.service;
 import com.laca.BL.FactoryUnitTransport.FactoryUnitTransporter;
 import com.laca.entity.PackageUnitAbstract.UnitTransporterAbstract;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class UnitTransportService {
     private final DataSource dataSource;
 
@@ -31,7 +32,8 @@ public class UnitTransportService {
                         resultSet.getLong("width"),
                         resultSet.getString("Type"),
                         resultSet.getLong("Max_Weight"),
-                        resultSet.getBoolean("Is_Active")
+                        resultSet.getBoolean("Is_Active"),
+                        resultSet.getLong("id")
                 ));
             }
         } catch (SQLException e) {
@@ -42,7 +44,7 @@ public class UnitTransportService {
     @Transactional
     public UnitTransporterAbstract saveUnitTransporter(UnitTransporterAbstract unitTransporterAbstract) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "INSERT INTO unit_transport (name, plate,high,width,type,maxWeight,isActive) VALUES (?,?,?,?,?,?,?)";
+            String query = "INSERT INTO unit_transport (name, plate,high,width,type,Max_Weight,Is_Active) VALUES (?,?,?,?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, unitTransporterAbstract.getName());
             statement.setString(2, unitTransporterAbstract.getPlate());
@@ -125,6 +127,33 @@ public class UnitTransportService {
                 unitTransporterAbstract.setMaxWeight(resultSet.getLong("name"));
                 unitTransporterAbstract.setIsActive(resultSet.getBoolean("isActive"));
                 return unitTransporterAbstract;
+            } else {
+                throw new RuntimeException("Unit Transporter not found with ID: " + UnitTransporterId);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving transporter: " + e.getMessage(), e);
+        }
+    }
+
+    @Transactional
+    public UnitTransporterAbstract DuplicateUnitTransport(Long UnitTransporterId) {
+        try (Connection connection = dataSource.getConnection()) {
+            String query = "SELECT id,name,plate,high,width,type,maxWeight,isActive FROM unit_transport WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setLong(1, UnitTransporterId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+
+                UnitTransporterAbstract unitTransporterAbstract = new UnitTransporterAbstract();
+                unitTransporterAbstract.setName(resultSet.getString("name"));
+                unitTransporterAbstract.setPlate(resultSet.getString("plate"));
+                unitTransporterAbstract.setHigh(resultSet.getLong("high"));
+                unitTransporterAbstract.setWidth(resultSet.getLong("width"));
+                unitTransporterAbstract.setType(resultSet.getString("type"));
+                unitTransporterAbstract.setMaxWeight(resultSet.getLong("name"));
+                unitTransporterAbstract.setIsActive(resultSet.getBoolean("isActive"));
+                return unitTransporterAbstract;
+
             } else {
                 throw new RuntimeException("Unit Transporter not found with ID: " + UnitTransporterId);
             }

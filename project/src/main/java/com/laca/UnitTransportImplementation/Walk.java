@@ -11,8 +11,8 @@ public class Walk extends UnitTransporterAbstract {
     }
 
 
-    public Walk(String name, String plate, double high, double width, String type, double maxWeight,boolean isActive) {
-        super(name, plate, high, width, type, maxWeight,isActive);
+    public Walk(String name, String plate, double high, double width, String type, double maxWeight,boolean isActive,Long id) {
+        super(name, plate, high, width, type, maxWeight,isActive,id);
         this.setType("Walk");
         this.setMaxWeight(30);
     }
