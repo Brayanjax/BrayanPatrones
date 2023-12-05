@@ -5,9 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fa28e3a7-4915-4eeb-8d25-c32cecc12fbb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/laca/entity/Base/BaseHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/laca/entity/Interfaces/Handler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/src/main/java/com/laca/entity/concreteHandlers/HandlersClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,6 +51,9 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;spring.configuration.checksum&quot;: &quot;23ff5e1ed443861eaca377495be7b2ec&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -79,7 +79,8 @@
       <workItem from="1701310372637" duration="373000" />
       <workItem from="1701410641904" duration="86000" />
       <workItem from="1701734985421" duration="1502000" />
-      <workItem from="1701753623245" duration="1039000" />
+      <workItem from="1701753623245" duration="2469000" />
+      <workItem from="1701812426057" duration="22000" />
     </task>
     <servers />
   </component>
