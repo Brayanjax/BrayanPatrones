@@ -1,6 +1,7 @@
 package com.laca.service;
 
 
+import com.laca.entity.RouteC.Coordinates;
 import com.laca.entity.RouteC.Point;
 import com.laca.entity.RouteC.Route;
 import com.laca.entity.Transporter;
@@ -32,10 +33,13 @@ public class RouteService {
                 route.setId(resultSet.getLong("id"));
                 route.setName(resultSet.getString("name"));
                 route.setDescription(resultSet.getString("description"));
+                Coordinates coordinates = new Coordinates();
+                coordinates.setLatitude(resultSet.getDouble("latitude"));
+                coordinates.setLongitude(resultSet.getDouble("longitude"));
                 Point point =new Point();
                 point.setName(resultSet.getString("namePoint"));
                 point.setDescription(resultSet.getString("description"));
-                point.setCoordinates(resultSet.getDouble("coordinates"));
+                point.setCoordinates((Double) resultSet.getObject(String.valueOf(coordinates)));
                 route.setStartPoint((Point) resultSet.getObject(String.valueOf(point)));
                 route.setEndPoint((Point) resultSet.getObject(String.valueOf(point)));
                 routes.add(route);
@@ -53,7 +57,7 @@ public class RouteService {
             PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, route.getName());
             statement.setString(2, route.getDescription());
-            statement.setString(3, route.getEndPoint().ge);
+
             statement.setString(4, transporter.getCompany());
             statement.setString(5, transporter.getName());
 
