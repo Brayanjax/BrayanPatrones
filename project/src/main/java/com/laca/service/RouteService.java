@@ -1,15 +1,18 @@
 package com.laca.service;
 
 
+import com.laca.entity.RouteC.Point;
+import com.laca.entity.RouteC.Route;
 import com.laca.entity.Transporter;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class RouteService {
     private final DataSource dataSource;
 
@@ -18,32 +21,42 @@ public class RouteService {
     }
 
     @Transactional
-    public List<Transporter> getAllTransporters() {
-        List<Transporter> transporters = new ArrayList<>();
+    public List<Route> getAllRoutes() {
+        List<Route> routes = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM transporters";
+            String query = "SELECT * FROM routes";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Transporter transporter = new Transporter();
-                transporter.setId(resultSet.getLong("id"));
-                transporter.setName(resultSet.getString("name"));
-                transporter.setCompany(resultSet.getString("company"));
-                transporters.add(transporter);
+                Route route = new Route();
+                route.setId(resultSet.getLong("id"));
+                route.setName(resultSet.getString("name"));
+                route.setDescription(resultSet.getString("description"));
+                Point point =new Point();
+                point.setName(resultSet.getString("namePoint"));
+                point.setDescription(resultSet.getString("description"));
+                point.setCoordinates(resultSet.getDouble("coordinates"));
+                route.setStartPoint((Point) resultSet.getObject(String.valueOf(point)));
+                route.setEndPoint((Point) resultSet.getObject(String.valueOf(point)));
+                routes.add(route);
             }
         } catch (SQLException e) {
             // Manejo de excepciones
         }
-        return transporters;
+        return routes;
     }
 
     @Transactional
-    public Transporter saveTransporter(Transporter transporter) {
+    public Transporter saveRoutes(Route route) {
         try (Connection connection = dataSource.getConnection()) {
             String query = "INSERT INTO transporters (name, company) VALUES (?, ?)";
             PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-            statement.setString(1, transporter.getName());
-            statement.setString(2, transporter.getCompany());
+            statement.setString(1, route.getName());
+            statement.setString(2, route.getDescription());
+            statement.setString(3, route.getEndPoint().ge);
+            statement.setString(4, transporter.getCompany());
+            statement.setString(5, transporter.getName());
+
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 1) {
                 ResultSet generatedKeys = statement.getGeneratedKeys();

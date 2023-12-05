@@ -11,8 +11,8 @@ public class Van extends UnitTransporterAbstract {
         this.setMaxWeight(60);
     }
 
-    public Van(String name, String plate, double high, double width, String type, double maxWeight,boolean isActive) {
-        super(name, plate, high, width, type, maxWeight,isActive);
+    public Van(String name, String plate, double high, double width, String type, double maxWeight,boolean isActive,Long id) {
+        super(name, plate, high, width, type, maxWeight,isActive,id);
         this.setType("Truck");
         this.setMaxWeight(60);
     }

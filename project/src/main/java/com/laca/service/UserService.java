@@ -6,13 +6,14 @@ import com.laca.BL.FactoryUsers.FactoryUsers;
 import com.laca.entity.Interfaces.IConstructUser;
 import com.laca.entity.PackageUnitAbstract.Users;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class UserService {
     private final DataSource dataSource;
 
