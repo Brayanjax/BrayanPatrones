@@ -1,52 +1,66 @@
 package com.laca.facade;
 
-import com.laca.entity.PackageUnitAbstract.UnitTransporterAbstract;
 import com.laca.entity.RouteC.Route;
 import com.laca.entity.concretProduct.Product;
+import com.laca.entity.PackageUnitAbstract.UnitTransporterAbstract;
+import com.laca.PackageState.PackageContext;
+import com.laca.PackageState.PendingState;
+import com.laca.PackageState.InTransitState;
+import com.laca.PackageState.DeliveredState;
+
 
 public class FacadeSend {
 
-    private String UserName;
-    private String routes;
+    private Route route;
     private Product product;
     private UnitTransporterAbstract unitTransport;
+    private PackageContext packageContext;
 
-    public FacadeSend(String userName, Route routes, Product product, UnitTransporterAbstract unitTransport) {
-        UserName = userName;
-        this.routes = routes;
+
+
+    public FacadeSend() {
+        this.packageContext = new PackageContext(new PendingState());
+    }
+
+    public void prepareShipment(Product product, UnitTransporterAbstract unitTransport, Route route) {
         this.product = product;
+        this.unitTransport = unitTransport;
+        this.route = route;
+    }
+
+    public void sendPackage() {
+
+        this.packageContext.setState(new InTransitState());
+    }
+
+    public void packageDelivered() {
+
+        this.packageContext.setState(new DeliveredState());
+    }
+
+    public Route getRoute() {
+        return route;
+    }
+
+    public void setRoute(Route route) {
+        this.route = route;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public void setUnitTransport(UnitTransporterAbstract unitTransport) {
         this.unitTransport = unitTransport;
     }
 
-    public String getUserName() {
-        return UserName;
+    public PackageContext getPackageContext() {
+        return packageContext;
     }
 
-    public void setUserName(String userName) {
-        UserName = userName;
+    public void setPackageContext(PackageContext packageContext) {
+        this.packageContext = packageContext;
     }
 
-    public Route getRoutes() {
-        return routes;
-    }
 
-    public void setRoutes(String routes) {
-        this.routes = routes;
-    }
-
-    public String getProduct() {
-        return product;
-    }
-
-    public void setProduct(String product) {
-        this.product = product;
-    }
-
-    public String getUnitTransport() {
-        return unitTransport;
-    }
-
-    public void setUnitTransport(String unitTransport) {
-        this.unitTransport = unitTransport;
-    }
 }
