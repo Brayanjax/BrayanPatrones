@@ -24,6 +24,10 @@ public class Route implements RoutePrototype {
 
     }
 
+    public Route(String type, String name, String description, Point clone, Point clone1) {
+    }
+
+
     public Long getId() {
         return id;
     }

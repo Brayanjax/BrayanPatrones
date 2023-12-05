@@ -9,6 +9,10 @@ public class Coordinates {
         this.longitude = longitude;
     }
 
+    public Coordinates() {
+
+    }
+
     public Coordinates clone() {
 
         return new Coordinates(latitude, longitude);
