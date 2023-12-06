@@ -9,7 +9,9 @@ import com.laca.entity.PackageUnitAbstract.Users;
 import com.laca.entity.RouteC.*;
 import com.laca.entity.concretCreator.ProductLogistics;
 import com.laca.entity.concretProduct.Product;
+import com.laca.entity.concretUsers.ClientUser;
 import com.laca.entity.concretUsers.TransportUser;
+import com.laca.entity.concreteHandlers.HandlersClient;
 import com.laca.facade.FacadeSend;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,6 +35,22 @@ public class LatinAmericanCarriersAssociationApplication {
 			ejecutarOpcion(opcion);
 		}
 	}
+
+	private static void runChainOfResponsibility() {
+
+		HandlersClient handler1 = new HandlersClient(new ProductLogistics());
+		HandlersClient handler2 = new HandlersClient(new ProductLogistics());
+		HandlersClient handler3 = new HandlersClient(new ProductLogistics());
+
+		handler1.setNextHandler(handler2);
+		handler2.setNextHandler(handler3);
+
+		ClientUser client = new ClientUser("NombreCliente", "IDCliente", "NombreFabrica", "TipoCliente");
+		Product product = new Product("TipoProducto", 2.5, "NombreProducto", "Descripción", 10.99, 20.0, 15.0);
+
+		handler1.handlePackageCreation(client, product);
+	}
+
 	static Scanner scanner = new Scanner(System.in);
 
 	public static void mostrarMenu(){
