@@ -113,7 +113,7 @@ public class UnitTransportService {
     @Transactional
     public UnitTransporterAbstract getUnitTransporterById(Long UnitTransporterId) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT id,name,plate,high,width,type,maxWeight,isActive FROM unit_transport WHERE id = ?";
+            String query = "SELECT id,name,plate,high,width,type,Max_Weight,Is_Active FROM unit_transport WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, UnitTransporterId);
             ResultSet resultSet = statement.executeQuery();
@@ -124,8 +124,8 @@ public class UnitTransportService {
                 unitTransporterAbstract.setHigh(resultSet.getLong("high"));
                 unitTransporterAbstract.setWidth(resultSet.getLong("width"));
                 unitTransporterAbstract.setType(resultSet.getString("type"));
-                unitTransporterAbstract.setMaxWeight(resultSet.getLong("name"));
-                unitTransporterAbstract.setIsActive(resultSet.getBoolean("isActive"));
+                unitTransporterAbstract.setMaxWeight(resultSet.getLong("Max_Weight"));
+                unitTransporterAbstract.setIsActive(resultSet.getBoolean("Is_Active"));
                 return unitTransporterAbstract;
             } else {
                 throw new RuntimeException("Unit Transporter not found with ID: " + UnitTransporterId);
@@ -136,29 +136,48 @@ public class UnitTransportService {
     }
 
     @Transactional
-    public UnitTransporterAbstract DuplicateUnitTransport(Long UnitTransporterId) {
+    public UnitTransporterAbstract DuplicateUnitTransporter(UnitTransporterAbstract upadatedUnitTransporterAbstract) {
+
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT id,name,plate,high,width,type,maxWeight,isActive FROM unit_transport WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setLong(1, UnitTransporterId);
-            ResultSet resultSet = statement.executeQuery();
+            String storedProcedureCall = "{call cloneUnitTransport(?, ?, ?, ?, ?, ?, ?)}";
+            CallableStatement statement = connection.prepareCall(storedProcedureCall);
+            statement.setLong(1, upadatedUnitTransporterAbstract.getId());
+            statement.setString(2, upadatedUnitTransporterAbstract.getName());
+            statement.setString(3, upadatedUnitTransporterAbstract.getPlate());
+            statement.setDouble(4, upadatedUnitTransporterAbstract.getHigh());
+            statement.setDouble(5, upadatedUnitTransporterAbstract.getWidth());
+            statement.setString(6, upadatedUnitTransporterAbstract.getType());
+            statement.setDouble(7, upadatedUnitTransporterAbstract.getMaxWeight());
+            statement.setBoolean(8, upadatedUnitTransporterAbstract.getIsActive());
+            boolean hasResults = statement.execute();
+            if (!hasResults) {
+                throw new RuntimeException("Error updating Unit transporter: No results from the stored procedure.");
+            }
+            ResultSet resultSet = statement.getResultSet();
             if (resultSet.next()) {
-
-                UnitTransporterAbstract unitTransporterAbstract = new UnitTransporterAbstract();
-                unitTransporterAbstract.setName(resultSet.getString("name"));
-                unitTransporterAbstract.setPlate(resultSet.getString("plate"));
-                unitTransporterAbstract.setHigh(resultSet.getLong("high"));
-                unitTransporterAbstract.setWidth(resultSet.getLong("width"));
-                unitTransporterAbstract.setType(resultSet.getString("type"));
-                unitTransporterAbstract.setMaxWeight(resultSet.getLong("name"));
-                unitTransporterAbstract.setIsActive(resultSet.getBoolean("isActive"));
-                return unitTransporterAbstract;
-
+                int updatedId = resultSet.getInt("id");
+                String updatedName = resultSet.getString("Name");
+                String updatedPlate = resultSet.getString("Plate");
+                double updatedHigh = resultSet.getDouble("high");
+                double updatedWidth = resultSet.getDouble("width");
+                String updatedType = resultSet.getString("Type");
+                double updatedMaxWeight = resultSet.getDouble(("Max_Weight"));
+                boolean updatedIsActive = resultSet.getBoolean("Is_Active");
+                // Crea un nuevo Transporter con los datos actualizados y devuélvelo
+                upadatedUnitTransporterAbstract.setId((long) updatedId);
+                upadatedUnitTransporterAbstract.setName(updatedName);
+                upadatedUnitTransporterAbstract.setPlate(updatedPlate);
+                upadatedUnitTransporterAbstract.setHigh(updatedHigh);
+                upadatedUnitTransporterAbstract.setWidth(updatedWidth);
+                upadatedUnitTransporterAbstract.setType(updatedType);
+                upadatedUnitTransporterAbstract.setMaxWeight(updatedMaxWeight);
+                upadatedUnitTransporterAbstract.setIsActive(updatedIsActive);
+                return upadatedUnitTransporterAbstract;
             } else {
-                throw new RuntimeException("Unit Transporter not found with ID: " + UnitTransporterId);
+                throw new RuntimeException("Unit Transporter not found by ID");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error retrieving transporter: " + e.getMessage(), e);
+            throw new RuntimeException("Error updating Unit transporter: " + e.getMessage(), e);
         }
     }
     @Transactional

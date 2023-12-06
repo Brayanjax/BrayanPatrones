@@ -1,9 +1,11 @@
 package com.laca.entity.concretProduct;
 
 
+import com.laca.entity.Interfaces.Observable;
+import com.laca.entity.Interfaces.Observer;
 import com.laca.entity.Interfaces.Production;
 
-public class Product implements Production {
+public class Product implements Production{
     private String type;
     private double weight;
     private String name;
@@ -105,4 +107,7 @@ public class Product implements Production {
 
     public void setId(long aLong) {/////////////////////REVISAAAAAR LINEA 54 EN PRODUCT SERVICE
     }
+
+
+
 }

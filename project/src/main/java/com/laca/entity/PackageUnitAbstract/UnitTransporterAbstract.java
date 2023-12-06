@@ -2,8 +2,12 @@ package com.laca.entity.PackageUnitAbstract;
 
 
 import com.laca.entity.Interfaces.IProduct;
+import com.laca.entity.Interfaces.Observable;
+import com.laca.entity.Interfaces.Observer;
 
-public  class UnitTransporterAbstract implements IProduct {
+import java.util.ArrayList;
+
+public  class UnitTransporterAbstract implements IProduct, Observable {
         private String name;
         private String plate;
         private double high;
@@ -13,7 +17,7 @@ public  class UnitTransporterAbstract implements IProduct {
         private boolean isActive;
 
         private Long id;
-
+        private ArrayList<Observer> unitTransporterAbstracts;
         public UnitTransporterAbstract(){}
 
 
@@ -30,7 +34,22 @@ public  class UnitTransporterAbstract implements IProduct {
 
     public static void setId(long aLong) {
     }
+    @Override
+    public void addObserver(Observer o) {
+        unitTransporterAbstracts.add(o);
+    }
 
+    @Override
+    public void deleteObserver(Observer o) {
+        unitTransporterAbstracts.remove(o);
+    }
+
+    @Override
+    public void notifyObserver(UnitTransporterAbstract unitTransporterAbstract) {
+        for (Observer observer : unitTransporterAbstracts){
+            observer.update(unitTransporterAbstract);
+        }
+    }
     @Override
     public IProduct clonar() {
         UnitTransporterAbstract unitTransporter = null;

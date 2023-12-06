@@ -41,7 +41,7 @@ public class Point {
         return coordinates;
     }
 
-    public void setCoordinates(double coordinates) {
+    public void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
     }
 
