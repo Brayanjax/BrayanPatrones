@@ -12,10 +12,10 @@ public class TransportUser extends Users implements Observer {
         super(name,identification,factoryName,type);
     }
 
+    public TransportUser() {
 
-
-    @Override
-    public void update(UnitTransporterAbstract unitTransporterAbstract) {
-        System.out.println("Se registro o elimino una unidad de transporte: "+unitTransporterAbstract);
     }
+
+
+
 }
