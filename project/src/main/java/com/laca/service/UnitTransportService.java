@@ -113,7 +113,7 @@ public class UnitTransportService {
     @Transactional
     public UnitTransporterAbstract getUnitTransporterById(Long UnitTransporterId) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT id,name,plate,high,width,type,maxWeight,isActive FROM unit_transport WHERE id = ?";
+            String query = "SELECT id,name,plate,high,width,type,Max_Weight,Is_Active FROM unit_transport WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, UnitTransporterId);
             ResultSet resultSet = statement.executeQuery();
@@ -124,8 +124,8 @@ public class UnitTransportService {
                 unitTransporterAbstract.setHigh(resultSet.getLong("high"));
                 unitTransporterAbstract.setWidth(resultSet.getLong("width"));
                 unitTransporterAbstract.setType(resultSet.getString("type"));
-                unitTransporterAbstract.setMaxWeight(resultSet.getLong("name"));
-                unitTransporterAbstract.setIsActive(resultSet.getBoolean("isActive"));
+                unitTransporterAbstract.setMaxWeight(resultSet.getLong("Max_Weight"));
+                unitTransporterAbstract.setIsActive(resultSet.getBoolean("Is_Active"));
                 return unitTransporterAbstract;
             } else {
                 throw new RuntimeException("Unit Transporter not found with ID: " + UnitTransporterId);
@@ -138,7 +138,7 @@ public class UnitTransportService {
     @Transactional
     public UnitTransporterAbstract DuplicateUnitTransport(Long UnitTransporterId) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT id,name,plate,high,width,type,maxWeight,isActive FROM unit_transport WHERE id = ?";
+            String query = "SELECT id,name,plate,high,width,type,Max_Weight,Is_Active FROM unit_transport WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, UnitTransporterId);
             ResultSet resultSet = statement.executeQuery();
