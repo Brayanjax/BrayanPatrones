@@ -34,6 +34,13 @@ public class UnitTransportController {
         return unitTransportService.saveUnitTransporter(unitTransporterAbstract);
     }
 
+
+
+    @PostMapping("/{DuplicateUnitTransporter}")
+    public UnitTransporterAbstract DuplicateUnitTransporter(@RequestBody UnitTransporterAbstract unitTransporterAbstract) {
+        return unitTransportService.DuplicateUnitTransporter(unitTransporterAbstract);
+    }
+
     @PutMapping("/{unit_transporter_I}")
     public ResponseEntity<?> updateUnitTransporter(
             @PathVariable Long transporterId,
