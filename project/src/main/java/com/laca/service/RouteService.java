@@ -1,15 +1,19 @@
 package com.laca.service;
 
 
+import com.laca.entity.RouteC.Coordinates;
+import com.laca.entity.RouteC.Point;
+import com.laca.entity.RouteC.Route;
 import com.laca.entity.Transporter;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class RouteService {
     private final DataSource dataSource;
 
@@ -18,59 +22,70 @@ public class RouteService {
     }
 
     @Transactional
-    public List<Transporter> getAllTransporters() {
-        List<Transporter> transporters = new ArrayList<>();
+    public List<Route> getAllRoutes() {
+        List<Route> routes = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM transporters";
+            String query = "SELECT * FROM routes";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Transporter transporter = new Transporter();
-                transporter.setId(resultSet.getLong("id"));
-                transporter.setName(resultSet.getString("name"));
-                transporter.setCompany(resultSet.getString("company"));
-                transporters.add(transporter);
+                Route route = new Route();
+                route.setId(resultSet.getLong("id"));
+                route.setName(resultSet.getString("name"));
+                route.setDescription(resultSet.getString("description"));
+                Coordinates coordinates = new Coordinates();
+                coordinates.setLatitude(resultSet.getDouble("latitude"));
+                coordinates.setLongitude(resultSet.getDouble("longitude"));
+                Point point =new Point();
+                point.setName(resultSet.getString("namePoint"));
+                point.setDescription(resultSet.getString("description"));
+                point.setCoordinates((Double) resultSet.getObject(String.valueOf(coordinates)));
+                route.setStartPoint((Point) resultSet.getObject(String.valueOf(point)));
+                route.setEndPoint((Point) resultSet.getObject(String.valueOf(point)));
+                routes.add(route);
             }
         } catch (SQLException e) {
             // Manejo de excepciones
         }
-        return transporters;
+        return routes;
     }
 
     @Transactional
-    public Transporter saveTransporter(Transporter transporter) {
+    public Route saveRoutes(Route route) {
         try (Connection connection = dataSource.getConnection()) {
             String query = "INSERT INTO transporters (name, company) VALUES (?, ?)";
             PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-            statement.setString(1, transporter.getName());
-            statement.setString(2, transporter.getCompany());
+            statement.setString(1, route.getName());
+            statement.setString(2, route.getDescription());
+
+
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 1) {
                 ResultSet generatedKeys = statement.getGeneratedKeys();
                 if (generatedKeys.next()) {
-                    transporter.setId(generatedKeys.getLong(1));
+                    route.setId(generatedKeys.getLong(1));
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error saving new transporter");
+            throw new RuntimeException("Error saving new route");
         }
-        return transporter;
+        return route;
     }
 
     @Transactional
-    public Transporter updateTransporter(Long transporterId, Transporter updatedTransporter) {
+    public Route updateRoute(Long routeId, Route updatedRoute) {
         try (Connection connection = dataSource.getConnection()) {
-            String storedProcedureCall = "{call update_transporter(?, ?, ?)}";
+            String storedProcedureCall = "{call update_route(?, ?, ?)}";
             CallableStatement statement = connection.prepareCall(storedProcedureCall);
 
-            statement.setLong(1, transporterId);
-            statement.setString(2, updatedTransporter.getName());
-            statement.setString(3, updatedTransporter.getCompany());
+            statement.setLong(1, routeId);
+            statement.setString(2, updatedRoute.getName());
+            statement.setString(3, updatedRoute.getDescription());
 
             boolean hasResults = statement.execute();
 
             if (!hasResults) {
-                throw new RuntimeException("Error updating transporter: No results from the stored procedure.");
+                throw new RuntimeException("Error updating route: No results from the stored procedure.");
             }
 
             ResultSet resultSet = statement.getResultSet();
@@ -78,52 +93,52 @@ public class RouteService {
             if (resultSet.next()) {
                 int updatedId = resultSet.getInt("id");
                 String updatedName = resultSet.getString("name");
-                String updatedCompany = resultSet.getString("company");
+                String updatedDescription = resultSet.getString("description");
 
                 // Crea un nuevo Transporter con los datos actualizados y devuélvelo
-                updatedTransporter.setId((long) updatedId);
-                updatedTransporter.setName(updatedName);
-                updatedTransporter.setCompany(updatedCompany);
+                updatedRoute.setId((long) updatedId);
+                updatedRoute.setName(updatedName);
+                updatedRoute.setDescription(updatedDescription);
 
-                return updatedTransporter;
+                return updatedRoute;
             } else {
-                throw new RuntimeException("Transporter not found by ID");
+                throw new RuntimeException("Route not found by ID");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error updating transporter: " + e.getMessage(), e);
+            throw new RuntimeException("Error updating route: " + e.getMessage(), e);
         }
     }
 
     @Transactional
-    public Transporter getTransporterById(Long transporterId) {
+    public Route getRouteById(Long routeId) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT id, name, company FROM transporters WHERE id = ?";
+            String query = "SELECT id, name, description FROM route WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setLong(1, transporterId);
+            statement.setLong(1, routeId);
 
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                Transporter transporter = new Transporter();
-                transporter.setId(resultSet.getLong("id"));
-                transporter.setName(resultSet.getString("name"));
-                transporter.setCompany(resultSet.getString("company"));
-                return transporter;
+                Route route = new Route();
+                route.setId(resultSet.getLong("id"));
+                route.setName(resultSet.getString("name"));
+                route.setDescription(resultSet.getString("description"));
+                return route;
             } else {
-                throw new RuntimeException("Transporter not found with ID: " + transporterId);
+                throw new RuntimeException("Route not found with ID: " + routeId);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error retrieving transporter: " + e.getMessage(), e);
+            throw new RuntimeException("Error retrieving route: " + e.getMessage(), e);
         }
     }
 
 
     @Transactional
-    public Boolean deleteTransporter(Long transporterId) {
+    public Boolean deleteRoute(Long routeId) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "DELETE FROM transporters where transporters.id  = ?";
+            String query = "DELETE FROM route where route.id  = ?";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setLong(1, transporterId);
+            statement.setLong(1, routeId);
             int rowsAffected = statement.executeUpdate();
 
             if (rowsAffected == 0) {

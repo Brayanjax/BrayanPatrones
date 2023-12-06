@@ -1,8 +1,10 @@
-package main.java.com.laca.controller;
+package com.laca.controller;
 
 
+import com.laca.entity.RouteC.Route;
+import com.laca.service.RouteService;
 import com.laca.service.TransporterService;
-import main.java.com.laca.entity.Transporter;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,62 +14,62 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/transporters")
+@RequestMapping("/route")
 @CrossOrigin(origins = "http://localhost:4200/")
 public class RouteController {
-    private final TransporterService transporterService;
+    private final RouteService routeService;
 
     @Autowired
-    public TransporterController(TransporterService transporterService) {
-        this.transporterService = transporterService;
+    public RouteController(RouteService routeService) {
+        this.routeService = routeService;
     }
 
     @GetMapping
-    public List<Transporter> getAllTransporters() {
-        List<Transporter> transporters = transporterService.getAllTransporters();
-        return transporters;
+    public List<Route> getAllRoutes() {
+        List<Route> routes = routeService.getAllRoutes();
+        return routes;
     }
 
     @PostMapping
-    public Transporter saveTransporter(@RequestBody Transporter transporter) {
-        return transporterService.saveTransporter(transporter);
+    public Route saveRoute(@RequestBody Route route) {
+        return routeService.saveRoutes(route);
     }
 
-    @PutMapping("/{transporterId}")
-    public ResponseEntity<?> updateTransporter(
-            @PathVariable Long transporterId,
-            @RequestBody Transporter updatedTransporter) {
+    @PutMapping("/{routeId}")
+    public ResponseEntity<?> updateRoute(
+            @PathVariable Long routeId,
+            @RequestBody Route updatedRoute) {
         try {
-            Transporter updated = transporterService.updateTransporter(transporterId, updatedTransporter);
+            Route updated = routeService.updateRoute(routeId, updatedRoute);
             return ResponseEntity.ok(updated);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating transporter: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating Route: " + e.getMessage());
         }
     }
 
-    @GetMapping("/{transporterId}")
-    public ResponseEntity<?> getTransporterById(@PathVariable Long transporterId) {
+    @GetMapping("/{routeId}")
+    public ResponseEntity<?> getRouteById(@PathVariable Long routeId) {
         try {
-            Transporter transporter = transporterService.getTransporterById(transporterId);
-            return ResponseEntity.ok(transporter);
+            Route route = routeService.getRouteById(routeId);
+            return ResponseEntity.ok(route);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transporter not found: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Route not found: " + e.getMessage());
         }
     }
 
-    @DeleteMapping("/{transporterId}")
-    public ResponseEntity<?> deleteTransporter(@PathVariable Long transporterId) {
+    @DeleteMapping("/{routeId}")
+    public ResponseEntity<?> deleteRoute(@PathVariable Long routeId) {
         try {
-            boolean isDeleted = transporterService.deleteTransporter(transporterId);
-            Transporter transporter= new Transporter();
-            transporter.setId(transporterId);
+            boolean isDeleted = routeService.deleteRoute(routeId);
+            Route route= new Route();
+            route.setId(routeId);
             if (isDeleted) {
-                return ResponseEntity.ok(transporter);
+                return ResponseEntity.ok(route);
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(transporterId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(routeId);
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting transporter: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting Route: " + e.getMessage());
         }
 
     }

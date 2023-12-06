@@ -11,6 +11,9 @@ public class Point {
         this.coordinates = coordinates;
     }
 
+    public Point() {
+
+    }
 
 
     public Point clone() {
@@ -38,7 +41,7 @@ public class Point {
         return coordinates;
     }
 
-    public void setCoordinates(Coordinates coordinates) {
+    public void setCoordinates(double coordinates) {
         this.coordinates = coordinates;
     }
 

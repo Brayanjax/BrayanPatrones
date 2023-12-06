@@ -17,14 +17,15 @@ public  class UnitTransporterAbstract implements IProduct {
         public UnitTransporterAbstract(){}
 
 
-    public UnitTransporterAbstract(String name, String plate, double high, double width, String type, double maxWeight,boolean isActive) {
+    public UnitTransporterAbstract(String name, String plate, double high, double width, String type, double maxWeight,boolean isActive,Long id) {
         this.name = name;
         this.plate = plate;
-        this. high =  high;
+        this.high =  high;
         this.width = width;
         this.type = type;
-        this. maxWeight =  maxWeight;
+        this.maxWeight =  maxWeight;
         this.isActive= isActive;
+        this.id = id;
     }
 
     public static void setId(long aLong) {
@@ -91,6 +92,14 @@ public  class UnitTransporterAbstract implements IProduct {
 
     public void setMaxWeight(double maxWeight) {
         this.maxWeight = maxWeight;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

@@ -9,13 +9,31 @@ public class Route implements RoutePrototype {
     private String description;
     private Point startPoint;
     private Point endPoint;
+    private  Long id;
 
-    public Route(String type, String name, String description, Point startPoint, Point endPoint) {
+    public Route(String type, String name, String description, Point startPoint, Point endPoint,Long id) {
         this.type = type;
         this.name = name;
         this.description = description;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
+        this.id = id;
+    }
+
+    public Route() {
+
+    }
+
+    public Route(String type, String name, String description, Point clone, Point clone1) {
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getType() {
