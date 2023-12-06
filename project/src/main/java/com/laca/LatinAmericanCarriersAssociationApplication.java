@@ -39,7 +39,6 @@ public class LatinAmericanCarriersAssociationApplication {
 		}
 	}
 
-
 	private static void runChainOfResponsibility() {
 
 		HandlersClient handler1 = new HandlersClient(new ProductLogistics());

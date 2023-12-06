@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fa28e3a7-4915-4eeb-8d25-c32cecc12fbb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/main/java/com/laca/LatinAmericanCarriersAssociationApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/com/laca/LatinAmericanCarriersAssociationApplication.java" afterDir="false" />
     </list>
@@ -40,12 +42,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "auro-fre34"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;auro-fre34&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
@@ -72,6 +74,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
+    "android.gradle.sync.needed": "true",
     "git-widget-placeholder": "Lola",
     "last_opened_file_path": "/Users/imac/Documents/CENFO/Patrones/BrayanPatrones",
     "node.js.detected.package.eslint": "true",
@@ -91,6 +94,19 @@
     </key>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="BrayanPatrones" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="BrayanPatrones" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="LatinAmericanCarriersAssociationApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="project.main" />
@@ -114,6 +130,13 @@
       <workItem from="1701753623245" duration="2469000" />
       <workItem from="1701812426057" duration="22000" />
       <workItem from="1701840397637" duration="1383000" />
+      <workItem from="1701900065016" duration="9000" />
+      <workItem from="1701900124753" duration="86000" />
+      <workItem from="1701900218878" duration="259000" />
+      <workItem from="1701901997297" duration="20000" />
+      <workItem from="1701902024062" duration="12000" />
+      <workItem from="1701902083130" duration="18000" />
+      <workItem from="1701902109082" duration="16000" />
     </task>
     <servers />
   </component>
