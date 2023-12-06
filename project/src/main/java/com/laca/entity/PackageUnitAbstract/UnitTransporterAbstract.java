@@ -6,6 +6,8 @@ import com.laca.entity.Interfaces.Observable;
 import com.laca.entity.Interfaces.Observer;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public  class UnitTransporterAbstract implements IProduct, Observable {
         private String name;
@@ -17,7 +19,7 @@ public  class UnitTransporterAbstract implements IProduct, Observable {
         private boolean isActive;
 
         private Long id;
-        private ArrayList<Observer> unitTransporterAbstracts;
+        private Set<Observer> unitTransporterAbstracts=new HashSet<>();
         public UnitTransporterAbstract(){}
 
 
@@ -32,6 +34,7 @@ public  class UnitTransporterAbstract implements IProduct, Observable {
         this.id = id;
     }
 
+
     public static void setId(long aLong) {
     }
     @Override
@@ -45,11 +48,13 @@ public  class UnitTransporterAbstract implements IProduct, Observable {
     }
 
     @Override
-    public void notifyObserver(UnitTransporterAbstract unitTransporterAbstract) {
+    public void notifyObserver() {
         for (Observer observer : unitTransporterAbstracts){
-            observer.update(unitTransporterAbstract);
+            observer.update();
         }
     }
+
+
     @Override
     public IProduct clonar() {
         UnitTransporterAbstract unitTransporter = null;
@@ -59,6 +64,14 @@ public  class UnitTransporterAbstract implements IProduct, Observable {
             e.printStackTrace();
         }
         return unitTransporter;
+    }
+
+    public Set<Observer> getUnitTransporterAbstracts() {
+        return unitTransporterAbstracts;
+    }
+
+    public void setUnitTransporterAbstracts(Set<Observer> unitTransporterAbstracts) {
+        this.unitTransporterAbstracts = unitTransporterAbstracts;
     }
 
     public String getName() {
@@ -132,4 +145,6 @@ public  class UnitTransporterAbstract implements IProduct, Observable {
                 ", maxWeight=" + maxWeight +
                 '}';
     }
+
+
 }

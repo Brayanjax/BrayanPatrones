@@ -1,8 +1,9 @@
 package com.laca.entity.PackageUnitAbstract;
 
 import com.laca.entity.Interfaces.IConstructUser;
+import com.laca.entity.Interfaces.Observer;
 
-public class Users implements IConstructUser {
+public class Users implements IConstructUser, Observer {
     private String name;
     private String identification;
     private  String factoryName;
@@ -67,5 +68,10 @@ public class Users implements IConstructUser {
         this.identification = identification;
         this.factoryName = factoryName;
         this.type = type;
+    }
+
+    @Override
+    public void update() {
+        System.out.println("Se registro o elimino una unidad de transporte: ");
     }
 }
