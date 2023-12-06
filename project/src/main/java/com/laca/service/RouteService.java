@@ -39,7 +39,7 @@ public class RouteService {
                 Point point =new Point();
                 point.setName(resultSet.getString("namePoint"));
                 point.setDescription(resultSet.getString("description"));
-                point.setCoordinates((Double) resultSet.getObject(String.valueOf(coordinates)));
+                point.setCoordinates((Coordinates) resultSet.getObject(String.valueOf(coordinates)));
                 route.setStartPoint((Point) resultSet.getObject(String.valueOf(point)));
                 route.setEndPoint((Point) resultSet.getObject(String.valueOf(point)));
                 routes.add(route);
