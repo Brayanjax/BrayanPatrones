@@ -34,7 +34,7 @@ public class UnitTransportController {
         return unitTransportService.saveUnitTransporter(unitTransporterAbstract);
     }
 
-    @PutMapping("/{unit_transporter_Id}")
+    @PutMapping("/{unit_transporter_I}")
     public ResponseEntity<?> updateUnitTransporter(
             @PathVariable Long transporterId,
             @RequestBody UnitTransporterAbstract updatedTransporter) {
