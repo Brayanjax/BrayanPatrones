@@ -53,7 +53,7 @@ public class RouteService {
     @Transactional
     public Route saveRoutes(Route route) {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "INSERT INTO transporters (name, company) VALUES (?, ?)";
+            String query = "INSERT INTO routes (name, description) VALUES (?, ?)";
             PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, route.getName());
             statement.setString(2, route.getDescription());
