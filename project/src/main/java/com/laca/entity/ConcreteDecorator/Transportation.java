@@ -10,6 +10,6 @@ public class Transportation extends UnitTransportDecorator {
     }
     @Override
     public String Transport(){
-        return super.Transport();// ver como hacer para eliminar el producto
+        return "Se agrego capacidad de entregar";// ver como hacer para eliminar el producto
     }
 }
